@@ -71,13 +71,13 @@ export default function RoommateForm({ onSubmit }) {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-6">
             <div className="text-left">
-              <h1 className="text-3xl font-bold mb-1" style={{ color: '#025f46' }}>Roommate Match Making</h1>
+              <h1 className="text-3xl font-bold mb-1 text-center" style={{ color: '#025f46' }}>Roommate Match Making</h1>
               <p className="text-gray-600 text-center text-sm">Connect with fellow students</p>
             </div>
           </div>
         </div>
         <div className="mb-8">
-  <div className="relative flex justify-between items-center w-full">
+  <div className="relative flex justify-between items-center w-full gap-2 sm:gap-4 lg:gap-6">
     {/* Progress line background */}
     <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300 z-0 transform -translate-y-1/2 rounded-full"></div>
 
@@ -101,9 +101,9 @@ export default function RoommateForm({ onSubmit }) {
       const isCompleted = currentStep > stepNumber;
 
       return (
-        <div key={index} className="relative z-20 flex flex-col items-center text-center w-1/4">
+        <div key={index} className="relative z-20 flex-1 flex flex-col items-center text-center">
           <div
-            className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 font-bold text-white transition-all duration-300 ${
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 sm:mb-2 font-bold text-white text-sm sm:text-base transition-all duration-300 ${
               isActive || isCompleted ? '' : 'bg-gray-200 text-gray-500'
             }`}
             style={{
@@ -112,10 +112,16 @@ export default function RoommateForm({ onSubmit }) {
           >
             {isCompleted ? '✓' : step.icon}
           </div>
-          <span className={`text-sm font-semibold ${isActive ? 'text-[#025f46]' : 'text-gray-700'}`}>
+          <span
+            className={`text-[11px] pt-2 sm:text-sm font-semibold ${
+              isActive ? 'text-[#025f46]' : 'text-gray-700'
+            }`}
+          >
             {step.label}
           </span>
-          <span className="text-xs text-gray-500">{step.sub}</span>
+          <span className="text-[10px] text-gray-500 leading-tight">
+            {step.sub}
+          </span>
         </div>
       );
     })}
