@@ -8,12 +8,16 @@ export default function RoommateForm({ onSubmit }) {
     name: '', age: '', gender: '', occupation: '', phone: '', email: '', studentId: '', faculty: '', religion: '', department: '', level: '',
     budget: '', moveInDate: '', leaseDuration: '', preferredLocation: '', roomType: '',
     sleepSchedule: '', cleanliness: '', socialLevel: '', smokingPolicy: '', drinkingPolicy: '', petPolicy: '', guestPolicy: '',
-    hobbies: '', dealBreakers: '', additionalNotes: ''
+    hobbies: '', dealBreakers: '', additionalNotes: '', profileImage: ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = (imageUrl) => {
+    setFormData((prev) => ({ ...prev, profileImage: imageUrl }));
   };
 
   const validateStep1 = () => formData.name && formData.age && formData.department && formData.level && formData.religion && formData.gender && formData.phone && formData.email;
@@ -57,11 +61,11 @@ export default function RoommateForm({ onSubmit }) {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 1: return <PersonalInfoStep formData={formData} handleChange={handleChange} />;
+      case 1: return <PersonalInfoStep formData={formData} handleChange={handleChange} handleImageUpload={handleImageUpload} />;
       case 2: return <AccommodationStep formData={formData} handleChange={handleChange} />;
       case 3: return <LifestyleStep formData={formData} handleChange={handleChange} />;
       case 4: return <AdditionalInfoStep formData={formData} handleChange={handleChange} />;
-      default: return <PersonalInfoStep formData={formData} handleChange={handleChange} />;
+      default: return <PersonalInfoStep formData={formData} handleChange={handleChange} handleImageUpload={handleImageUpload} />;
     }
   };
 
@@ -77,57 +81,56 @@ export default function RoommateForm({ onSubmit }) {
           </div>
         </div>
         <div className="mb-8">
-  <div className="relative flex justify-between items-center w-full gap-2 sm:gap-4 lg:gap-6">
-    {/* Progress line background */}
-    <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300 z-0 transform -translate-y-1/2 rounded-full"></div>
+          <div className="relative flex justify-between items-center w-full gap-2 sm:gap-4 lg:gap-6">
+            {/* Progress line background */}
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300 z-0 transform -translate-y-1/2 rounded-full"></div>
 
-    {/* Progress line fill */}
-    <div
-      className="absolute top-1/2 left-0 h-1 bg-[#f9c841] z-10 transform -translate-y-1/2 rounded-full transition-all duration-500 ease-in-out"
-      style={{
-        width: `${(currentStep - 1) / (totalSteps - 1) * 100}%`
-      }}
-    ></div>
+            {/* Progress line fill */}
+            <div
+              className="absolute top-1/2 left-0 h-1 bg-[#f9c841] z-10 transform -translate-y-1/2 rounded-full transition-all duration-500 ease-in-out"
+              style={{
+                width: `${(currentStep - 1) / (totalSteps - 1) * 100}%`
+              }}
+            ></div>
 
-    {/* Steps */}
-    {[
-      { icon: '👤', label: 'Personal Info', sub: 'Tell us who you are' },
-      { icon: '🏠', label: 'Preferences', sub: 'Your housing needs' },
-      { icon: '📚', label: 'Lifestyle', sub: 'Roommate habits' },
-      { icon: '📝', label: 'Extras', sub: 'Additional notes' },
-    ].map((step, index) => {
-      const stepNumber = index + 1;
-      const isActive = currentStep === stepNumber;
-      const isCompleted = currentStep > stepNumber;
+            {/* Steps */}
+            {[
+              { icon: '👤', label: 'Personal Info', sub: 'Tell us who you are' },
+              { icon: '🏠', label: 'Preferences', sub: 'Your housing needs' },
+              { icon: '📚', label: 'Lifestyle', sub: 'Roommate habits' },
+              { icon: '📝', label: 'Extras', sub: 'Additional notes' },
+            ].map((step, index) => {
+              const stepNumber = index + 1;
+              const isActive = currentStep === stepNumber;
+              const isCompleted = currentStep > stepNumber;
 
-      return (
-        <div key={index} className="relative z-20 flex-1 flex flex-col items-center text-center">
-          <div
-            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 sm:mb-2 font-bold text-white text-sm sm:text-base transition-all duration-300 ${
-              isActive || isCompleted ? '' : 'bg-gray-200 text-gray-500'
-            }`}
-            style={{
-              backgroundColor: isActive || isCompleted ? '#025f46' : undefined
-            }}
-          >
-            {isCompleted ? '✓' : step.icon}
+              return (
+                <div key={index} className="relative z-20 flex-1 flex flex-col items-center text-center">
+                  <div
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 sm:mb-2 font-bold text-white text-sm sm:text-base transition-all duration-300 ${
+                      isActive || isCompleted ? '' : 'bg-gray-200 text-gray-500'
+                    }`}
+                    style={{
+                      backgroundColor: isActive || isCompleted ? '#025f46' : undefined
+                    }}
+                  >
+                    {isCompleted ? '✓' : step.icon}
+                  </div>
+                  <span
+                    className={`text-[11px] pt-2 sm:text-sm font-semibold ${
+                      isActive ? 'text-[#025f46]' : 'text-gray-700'
+                    }`}
+                  >
+                    {step.label}
+                  </span>
+                  <span className="text-[10px] text-gray-500 leading-tight">
+                    {step.sub}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-          <span
-            className={`text-[11px] pt-2 sm:text-sm font-semibold ${
-              isActive ? 'text-[#025f46]' : 'text-gray-700'
-            }`}
-          >
-            {step.label}
-          </span>
-          <span className="text-[10px] text-gray-500 leading-tight">
-            {step.sub}
-          </span>
         </div>
-      );
-    })}
-  </div>
-</div>
-
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
           <form onSubmit={handleSubmit}>
@@ -177,8 +180,9 @@ export default function RoommateForm({ onSubmit }) {
     </div>
   );
 }
+
 // Step Components
-function PersonalInfoStep({ formData, handleChange }) {
+function PersonalInfoStep({ formData, handleChange, handleImageUpload }) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
@@ -189,6 +193,14 @@ function PersonalInfoStep({ formData, handleChange }) {
           <span className="text-2xl">🎓</span>
         </div>
         <p className="text-gray-600">Tell us about yourself and your academic background</p>
+      </div>
+
+      {/* Profile Image Upload Section */}
+      <div className="mb-8">
+        <ImageUpload 
+          currentImage={formData.profileImage}
+          onImageUpload={handleImageUpload}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -420,6 +432,272 @@ function AdditionalInfoStep({ formData, handleChange }) {
           onChange={handleChange}
           placeholder="Any additional information about yourself or specific requirements you'd like potential roommates to know..."
         />
+      </div>
+    </div>
+  );
+}
+
+// Enhanced Image Upload Component with File Upload and URL Input
+function ImageUpload({ currentImage, onImageUpload }) {
+  const [imageUrl, setImageUrl] = useState(currentImage || '');
+  const [isValidating, setIsValidating] = useState(false);
+  const [error, setError] = useState('');
+  const [uploadMethod, setUploadMethod] = useState('file'); // 'file' or 'url'
+  const [isDragging, setIsDragging] = useState(false);
+
+  // File upload handler
+  const handleFileUpload = (file) => {
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setError('Please upload a valid image file (JPG, PNG, GIF, or WebP)');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      setError('File size must be less than 5MB');
+      return;
+    }
+
+    // Convert file to base64 data URL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      setError('');
+      onImageUpload(dataUrl);
+    };
+    reader.onerror = () => {
+      setError('Failed to read the file. Please try again.');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+  };
+
+  // File input change handler
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  // URL validation
+  const validateImageUrl = async (url) => {
+    if (!url) return false;
+    
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'];
+    const hasValidExtension = imageExtensions.some(ext => 
+      url.toLowerCase().includes(ext)
+    );
+    
+    if (!hasValidExtension) {
+      setError('Please provide a URL that ends with .jpg, .png, .gif, .webp, or .bmp');
+      return false;
+    }
+
+    try {
+      setIsValidating(true);
+      const response = await fetch(url, { method: 'HEAD' });
+      const contentType = response.headers.get('content-type');
+      
+      if (response.ok && contentType && contentType.startsWith('image/')) {
+        setError('');
+        return true;
+      } else {
+        setError('Unable to load image from this URL. Please check the URL and try again.');
+        return false;
+      }
+    } catch (err) {
+      setError('Unable to access this image URL. Please check the URL and try again.');
+      return false;
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  // URL input handler
+  const handleUrlChange = async (e) => {
+    const url = e.target.value;
+    setImageUrl(url);
+    
+    if (url) {
+      const isValid = await validateImageUrl(url);
+      if (isValid) {
+        onImageUpload(url);
+      }
+    } else {
+      setError('');
+      onImageUpload('');
+    }
+  };
+
+  // Remove image handler
+  const handleRemoveImage = () => {
+    setImageUrl('');
+    onImageUpload('');
+    setError('');
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center">
+        <label className="block text-sm font-semibold text-gray-700 mb-4">
+          Profile Picture
+        </label>
+
+        {/* Upload Method Toggle */}
+        <div className="flex justify-center mb-4">
+          <div className="bg-gray-100 rounded-lg p-1 flex">
+            <button
+              type="button"
+              onClick={() => setUploadMethod('file')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                uploadMethod === 'file'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              📁 Upload File
+            </button>
+            <button
+              type="button"
+              onClick={() => setUploadMethod('url')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                uploadMethod === 'url'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              🔗 Image URL
+            </button>
+          </div>
+        </div>
+        
+        {/* Image Preview */}
+        <div className="mb-4">
+          {currentImage ? (
+            <div className="relative inline-block">
+              <img
+                src={currentImage}
+                alt="Profile preview"
+                className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 shadow-lg"
+                onError={() => {
+                  setError('Failed to load image. Please check the URL or try a different image.');
+                  onImageUpload('');
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center mx-auto border-4 border-gray-200">
+              <span className="text-4xl text-gray-400">📷</span>
+            </div>
+          )}
+        </div>
+
+        {/* Upload Interface */}
+        <div className="max-w-md mx-auto">
+          {uploadMethod === 'file' ? (
+            // File Upload Interface
+            <div>
+              {/* Drag and Drop Area */}
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`border-2 border-dashed rounded-lg p-6 text-center transition-all ${
+                  isDragging
+                    ? 'border-blue-400 bg-blue-50'
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+              >
+                <div className="space-y-2">
+                  <div className="text-3xl">📤</div>
+                  <div className="text-sm text-gray-600">
+                    <p>Drag and drop your image here, or</p>
+                    <label className="cursor-pointer text-blue-600 hover:text-blue-700 font-medium">
+                      click to browse
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileInputChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Supports: JPG, PNG, GIF, WebP (Max 5MB)
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // URL Input Interface
+            <div>
+              <input
+                type="url"
+                value={imageUrl}
+                onChange={handleUrlChange}
+                placeholder="Enter image URL (e.g., https://example.com/photo.jpg)"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all duration-200 bg-white hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+              />
+              
+              <div className="mt-2 text-xs text-gray-500">
+                <p>💡 Tips for URL uploads:</p>
+                <ul className="text-left mt-1 space-y-1">
+                  <li>• Use a public image URL (not from Google Drive, Facebook, etc.)</li>
+                  <li>• URL should end with .jpg, .png, .gif, .webp, or .bmp</li>
+                  <li>• Try uploading to imgur.com or similar image hosting service</li>
+                  <li>• Make sure the image is publicly accessible</li>
+                </ul>
+              </div>
+            </div>
+          )}
+          
+          {/* Loading State */}
+          {isValidating && (
+            <div className="mt-2 text-sm text-blue-600 flex items-center justify-center">
+              <span className="animate-spin mr-2">⏳</span>
+              Validating image...
+            </div>
+          )}
+          
+          {/* Error Message */}
+          {error && (
+            <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-200">
+              {error}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
